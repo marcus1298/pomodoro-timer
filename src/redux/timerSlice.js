@@ -22,7 +22,7 @@ const initialState = {
     [POMODORO]: {
       id: POMODORO,
       label: "Pomodoro",
-      time: 25,
+      time: 90,
     },
     [SHORT_BREAK]: {
       id: SHORT_BREAK,
