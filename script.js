@@ -1,46 +1,26 @@
-let timer;
+let startBtn = document.getElementById('startBtn');
+let timerDisplay = document.getElementById('timer');
+let interval;
 let isRunning = false;
-let minutes = 25;
-let seconds = 0;
 
-function updateTimerDisplay() {
-    document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
-    document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
-}
-
-function startStopTimer() {
+startBtn.addEventListener('click', function() {
     if (isRunning) {
-        clearInterval(timer);
-        document.getElementById('startStop').textContent = 'Iniciar';
+        clearInterval(interval);
+        startBtn.textContent = 'START';
     } else {
-        timer = setInterval(() => {
-            if (seconds === 0) {
-                if (minutes === 0) {
-                    clearInterval(timer);
-                    document.getElementById('startStop').textContent = 'Iniciar';
-                    alert('Pomodoro terminado!');
-                } else {
-                    minutes--;
-                    seconds = 59;
-                }
-            } else {
-                seconds--;
+        let time = 25 * 60;
+        interval = setInterval(function() {
+            let minutes = Math.floor(time / 60);
+            let seconds = time % 60;
+            timerDisplay.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            if (time <= 0) {
+                clearInterval(interval);
+                startBtn.textContent = 'START';
+                isRunning = false;
             }
-            updateTimerDisplay();
+            time--;
         }, 1000);
-        document.getElementById('startStop').textContent = 'Pausar';
+        startBtn.textContent = 'STOP';
     }
     isRunning = !isRunning;
-}
-
-function resetTimer() {
-    clearInterval(timer);
-    isRunning = false;
-    minutes = 25;
-    seconds = 0;
-    updateTimerDisplay();
-    document.getElementById('startStop').textContent = 'Iniciar';
-}
-
-document.getElementById('startStop').addEventListener('click', startStopTimer);
-document.getElementById('reset').addEventListener('click', resetTimer);
+});
